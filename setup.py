@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
         name='healtics',
         version='1.0',
-        py_modules= ['healtics',],
+        py_modules= ['healtics','setup_matplotlib'],
         package_data     = {
             "": [
                 "*.txt",
