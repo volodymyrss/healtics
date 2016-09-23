@@ -84,6 +84,8 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
             ovmin=levels.min()
             ovmax=levels.max()
 
+        levels=sorted(levels)
+
         plt.contour(longitude[::-1], latitude, grid_map_op, vmin=ovmin, vmax=ovmax, rasterized=True, cmap=cmapop,levels=levels)
         #image2 = plt.pcolormesh(longitude[::-1], latitude, grid_map, vmin=0.1, vmax=1., rasterized=True, cmap=cmap,alpha=0.3)
 
