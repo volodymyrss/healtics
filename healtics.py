@@ -77,6 +77,8 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         else:
             levels=[op[op>0].min()*onelevel]
 
+        levels=sorted(levels)
+
         print "levels:",levels
 
         if ilevels is not None:
