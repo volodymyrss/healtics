@@ -28,7 +28,7 @@ class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
         return GeoAxes.ThetaFormatter.__call__(self, x, pos)
 
 #def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",cmap2="bone",unit="$erg cm^{-2} s^{-1}$",title="",overplot=None):
-def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1,points=[],invra=False):
+def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1,points=[],invra=False,colorbar=True):
     if vmax is None:
         vmax=m.max()    
 
@@ -91,6 +91,8 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
                 levels=[onelevel]
 
 
+        levels=sorted(levels)
+
         print "levels:",levels
 
         if ilevels is not None:
@@ -123,11 +125,12 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
 
 
     # colorbar
-    cb = fig.colorbar(image, orientation='horizontal', shrink=.6, pad=0.05, ticks=[vmin, vmax])
-    cb.ax.xaxis.set_label_text(unit)
-    cb.ax.xaxis.labelpad = -8
-    # workaround for issue with viewers, see colorbar docstring
-    cb.solids.set_edgecolor("face")
+    if colorbar:
+        cb = fig.colorbar(image, orientation='horizontal', shrink=.6, pad=0.05, ticks=[vmin, vmax])
+        cb.ax.xaxis.set_label_text(unit)
+        cb.ax.xaxis.labelpad = -8
+        # workaround for issue with viewers, see colorbar docstring
+        cb.solids.set_edgecolor("face")
 
     ax.tick_params(axis='x', labelsize=10)
     ax.tick_params(axis='y', labelsize=10)
