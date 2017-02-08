@@ -10,7 +10,17 @@ class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
     """Shifts labelling by pi
 
     Shifts labelling from -180,180 to 0-360"""
+    extrapi=False
+
+    def __init__(self,*a,**aa):
+        if 'extrapi' in aa:
+            self.extrapi=aa['extrapi']
+        del aa['extrapi']
+        super(ThetaFormatterShiftPi,self).__init__(*a,**aa)
+
     def __call__(self, x, pos=None):
+        if self.extrapi:
+            x+=np.pi
         if x != 0:
             x *= -1
         if x < 0:
@@ -18,7 +28,7 @@ class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
         return GeoAxes.ThetaFormatter.__call__(self, x, pos)
 
 #def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",cmap2="bone",unit="$erg cm^{-2} s^{-1}$",title="",overplot=None):
-def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1):
+def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1,points=[],invra=False):
     if vmax is None:
         vmax=m.max()    
 
@@ -27,7 +37,11 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     nside=hp.npix2nside(m.shape[0])
     
     theta = np.linspace(np.pi, 0, ysize)
-    phi   = np.linspace(-np.pi, np.pi, xsize)
+
+    if invra:
+        phi   = np.linspace(0, 2*np.pi, xsize)
+    else:
+        phi   = np.linspace(-np.pi, np.pi, xsize)
     longitude = np.radians(np.linspace(-180, 180, xsize))
     latitude = np.radians(np.linspace(-90, 90, ysize))
 
@@ -50,32 +64,32 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     # flip longitude to the astro convention
     image = plt.pcolormesh(longitude[::-1], latitude, grid_map, vmin=vmin, vmax=vmax, rasterized=True, cmap=cmap)
 
-    for op,cmapop,onelevel in overplot:
+    print "to overplot",len(overplot)
+    print "to overplot",overplot
+
+    for op_set in overplot[0]:
+        print "op set",op_set
+        op,cmapop,onelevel=op_set 
+
         grid_map_op=hp.get_interp_val(op,THETA,PHI)
         print "overplotting",grid_map_op
 
 
 
         if onelevel is None:
-            #levels=np.logspace(-3,0,5)*grid_map_op.max()
-            #levels=[0.5*0.1*grid_map_op.max(),0.5*0.5*grid_map_op.max()]
-            levels=[(1-scipy.stats.norm(0,1.).cdf(sigma))*2*grid_map_op.max() for sigma in [1,2,3]]
+            indices = np.argsort(-grid_map_op)
+            region = np.empty(grid_map_op.shape)
+            n[indices] = 100 * np.cumsum(grid_map[indices])
 
-            level_containment=[]
-            for n in np.linspace(1,0,500):
-                #l=grid_map_op.max()*10**-n
-                l=grid_map_op.max()*n
-                containment=grid_map_op[grid_map_op>=l].sum()/grid_map_op.sum()
-                #print grid_map_op[grid_map_op>=l].shape[0],grid_map_op.flatten().shape[0]
-                area=grid_map_op[grid_map_op>=l].shape[0]*4*np.pi*(180/np.pi)**2/grid_map_op.flatten().shape[0]
-                #print "level",l/grid_map_op.max(),"containment",containment,"area",area
-                level_containment.append([l,l/grid_map_op.max(),containment])
-
-            get_c=lambda l:sorted(level_containment,key=lambda x:abs(x[2]-l))[0][0]
-            levels=[get_c(0.75),get_c(0.95)]
+            levels=[50,90]
 
         else:
-            levels=[op[op>0].min()*onelevel]
+            try:
+                #levels=[l*op.min() for l in onelevel]
+                levels=[l for l in onelevel]
+            except:
+                levels=[onelevel]
+
 
         print "levels:",levels
 
@@ -86,7 +100,9 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
 
         levels=sorted(levels)
 
-        plt.contour(longitude[::-1], latitude, grid_map_op, vmin=ovmin, vmax=ovmax, rasterized=True, cmap=cmapop,levels=levels)
+        
+        plt.contour(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels)
+        #plt.contour(longitude[::-1], latitude, grid_map_op, vmin=ovmin, vmax=ovmax, rasterized=True, cmap=cmapop,levels=levels)
         #image2 = plt.pcolormesh(longitude[::-1], latitude, grid_map, vmin=0.1, vmax=1., rasterized=True, cmap=cmap,alpha=0.3)
 
 
@@ -94,11 +110,17 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         
 
     # graticule
-    ax.set_longitude_grid(60)
-    ax.xaxis.set_major_formatter(ThetaFormatterShiftPi(60))
+    lon_g=ax.set_longitude_grid(60)
+    ax.xaxis.set_major_formatter(ThetaFormatterShiftPi(60,extrapi=invra))
     if width < 10:
-        ax.set_latitude_grid(45)
-        ax.set_longitude_grid_ends(90)
+        lat_g=ax.set_latitude_grid(45)
+        lon_g=ax.set_longitude_grid_ends(90)
+
+    for g in ax.xaxis.get_gridlines()+ax.yaxis.get_gridlines():
+        g.set_linestyle("dotted")
+        g.set_color("black")
+        g.set_alpha(0.5)
+
 
     # colorbar
     cb = fig.colorbar(image, orientation='horizontal', shrink=.6, pad=0.05, ticks=[vmin, vmax])
