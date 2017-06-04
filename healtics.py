@@ -147,5 +147,5 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     plt.subplots_adjust(bottom=spacing, top=1-spacing, left=spacing, right=1-spacing)
 
     plt.grid(True)
-    return fig
+    return fig,plt
 
