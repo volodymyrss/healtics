@@ -69,7 +69,19 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
 
     for op_set in overplot[0]:
         print "op set",op_set
-        op,cmapop,onelevel=op_set 
+
+        thickness = None
+        ls = None
+
+        if len(op_set)==3:
+            op,cmapop,onelevel=op_set
+
+        if len(op_set)==4:
+            op,cmapop,onelevel,thickness=op_set
+
+        if len(op_set)==5:
+            op,cmapop,onelevel,thickness,ls=op_set
+
 
         grid_map_op=hp.get_interp_val(op,THETA,PHI)
         print "overplotting",grid_map_op
@@ -103,7 +115,11 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         levels=sorted(levels)
 
         
-        plt.contour(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels)
+        CS=plt.contour(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels, linestyles=ls)
+        if thickness is not None:
+            plt.setp(CS.collections, linewidth=thickness)
+
+
         #plt.contour(longitude[::-1], latitude, grid_map_op, vmin=ovmin, vmax=ovmax, rasterized=True, cmap=cmapop,levels=levels)
         #image2 = plt.pcolormesh(longitude[::-1], latitude, grid_map, vmin=0.1, vmax=1., rasterized=True, cmap=cmap,alpha=0.3)
 
