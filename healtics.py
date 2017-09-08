@@ -28,7 +28,7 @@ class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
         return GeoAxes.ThetaFormatter.__call__(self, x, pos)
 
 #def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",cmap2="bone",unit="$erg cm^{-2} s^{-1}$",title="",overplot=None):
-def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1,points=[],invra=False,colorbar=True):
+def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^{}cm^{-2} s^{-1}}$",title="",overplot=[],ilevels=None,ovmin=0.1,ovmax=1,points=[],invra=False,colorbar=True,fig=None,tickfontsize=10):
     if vmax is None:
         vmax=m.max()    
 
@@ -54,7 +54,9 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     width=18
 # for width in [ 8.8]:
 # for width in [18., 12., 8.8]:
-    fig = plt.figure(figsize=(cm2inch(width), cm2inch(width)/(3./2.)))
+
+    if fig is None:
+        fig = plt.figure(figsize=(cm2inch(width), cm2inch(width)/(3./2.)))
     fig.suptitle(title)
     # matplotlib is doing the mollveide projection
     ax = fig.add_subplot(111,projection='mollweide')
@@ -115,9 +117,12 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         levels=sorted(levels)
 
         
-        CS=plt.contour(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels, linestyles=ls)
-        if thickness is not None:
-            plt.setp(CS.collections, linewidth=thickness)
+        if isinstance(ls,tuple):
+            CS=plt.contourf(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels, hatches=['', '/'],extend='both',alpha=0)
+        else:
+            CS=plt.contour(longitude[::-1], latitude, grid_map_op, colors=cmapop,levels=levels, linestyles=ls)
+            if thickness is not None:
+                plt.setp(CS.collections, linewidth=thickness)
 
 
         #plt.contour(longitude[::-1], latitude, grid_map_op, vmin=ovmin, vmax=ovmax, rasterized=True, cmap=cmapop,levels=levels)
@@ -148,8 +153,8 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         # workaround for issue with viewers, see colorbar docstring
         cb.solids.set_edgecolor("face")
 
-    ax.tick_params(axis='x', labelsize=10)
-    ax.tick_params(axis='y', labelsize=10)
+    ax.tick_params(axis='x', labelsize=tickfontsize)
+    ax.tick_params(axis='y', labelsize=tickfontsize)
 
     # remove tick labels
 #    ax.xaxis.set_ticklabels([])
