@@ -66,11 +66,11 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     # flip longitude to the astro convention
     image = plt.pcolormesh(longitude[::-1], latitude, grid_map, vmin=vmin, vmax=vmax, rasterized=True, cmap=cmap)
 
-    print "to overplot",len(overplot)
-    print "to overplot",overplot
+    print("to overplot",len(overplot))
+    print("to overplot",overplot)
 
     for op_set in overplot[0]:
-        print "op set",op_set
+        print("op set",op_set)
 
         thickness = None
         ls = None
@@ -86,7 +86,7 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
 
 
         grid_map_op=hp.get_interp_val(op,THETA,PHI)
-        print "overplotting",grid_map_op
+        print("overplotting",grid_map_op)
 
 
 
@@ -107,7 +107,7 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
 
         levels=sorted(levels)
 
-        print "levels:",levels
+        print("levels:",levels)
 
         if ilevels is not None:
             levels=ilevels
