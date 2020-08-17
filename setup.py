@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
         name='healtics',
-        version='1.1.1',
+        version='1.1.2',
         packages = [
                 "healtics",
             ],
