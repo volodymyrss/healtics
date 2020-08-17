@@ -1,4 +1,4 @@
-from setup_matplotlib import *
+from healtics.setup_matplotlib import *
 import healpy as hp
 import scipy
 import scipy.stats

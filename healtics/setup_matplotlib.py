@@ -5,7 +5,7 @@ from matplotlib import rcParams, rc
 params = {'backend': 'pdf',
           'savefig.dpi': 300, # save figures to 300 dpi
           'axes.labelsize': 10,
-          'text.fontsize': 10,
+          #'text.fontsize': 10,
           'legend.fontsize': 10,
           'xtick.labelsize': 10,
           'ytick.major.pad': 6,
