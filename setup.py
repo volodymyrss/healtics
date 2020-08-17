@@ -3,7 +3,9 @@ from setuptools import setup
 setup(
         name='healtics',
         version='1.1.0',
-        py_modules= ['healtics','setup_matplotlib'],
+        packages = [
+                "healtics",
+            ],
         package_data     = {
             "": [
                 "*.txt",
