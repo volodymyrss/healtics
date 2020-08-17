@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
         name='healtics',
-        version='1.0.0',
+        version='1.1.0',
         py_modules= ['healtics','setup_matplotlib'],
         package_data     = {
             "": [
@@ -12,6 +12,10 @@ setup(
                 "*.py"
                 ]
             },
+        install_requires = [
+                "healpy",
+                "matplotlib",
+            ],
         license='Creative Commons Attribution-Noncommercial-Share Alike license',
         long_description=open('README.md').read(),
         )

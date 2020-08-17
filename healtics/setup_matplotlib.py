@@ -17,12 +17,7 @@ params = {'backend': 'pdf',
           'font.sans-serif':'FreeSans'}
 
 # use of Sans Serif also in math mode
-#rc('text.latex', preamble=r'\usepackage{sfmath}')
+rc('text.latex', preamble=r'\usepackage{sfmath}')
 
-#rcParams.update(params)
+rcParams.update(params)
 
-import matplotlib.pyplot as plt
-
-def cm2inch(cm):
-    """Centimeters to inches"""
-    return cm *0.393701

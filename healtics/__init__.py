@@ -33,7 +33,7 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         vmax=m.max()    
 
     xsize = 2000
-    ysize = xsize/2.
+    ysize = int(xsize/2.)
     nside=hp.npix2nside(m.shape[0])
     
     theta = np.linspace(np.pi, 0, ysize)
