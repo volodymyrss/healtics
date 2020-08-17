@@ -21,3 +21,7 @@ rc('text.latex', preamble=r'\usepackage{sfmath}')
 
 rcParams.update(params)
 
+def cm2inch(cm):
+    """Centimeters to inches"""
+    return cm * 0.393701
+

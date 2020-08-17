@@ -6,6 +6,8 @@ import numpy as np
 
 from matplotlib.projections.geo import GeoAxes
 
+import matplotlib.pylab as plt
+
 class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
     """Shifts labelling by pi
 
