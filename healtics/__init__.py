@@ -1,12 +1,12 @@
 from healtics.setup_matplotlib import *
-import healpy as hp
-import scipy
-import scipy.stats
-import numpy as np
+import healpy as hp # type: ignore
+import scipy # type: ignore
+import scipy.stats # type: ignore
+import numpy as np # type: ignore
 
-from matplotlib.projections.geo import GeoAxes
+from matplotlib.projections.geo import GeoAxes# type: ignore
 
-import matplotlib.pylab as plt
+import matplotlib.pylab as plt # type: ignore
 
 class ThetaFormatterShiftPi(GeoAxes.ThetaFormatter):
     """Shifts labelling by pi
@@ -95,7 +95,7 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
         if onelevel is None:
             indices = np.argsort(-grid_map_op)
             region = np.empty(grid_map_op.shape)
-            n[indices] = 100 * np.cumsum(grid_map[indices])
+            m[indices] = 100 * np.cumsum(grid_map[indices])
 
             levels=[50,90]
 
