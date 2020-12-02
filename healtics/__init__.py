@@ -38,14 +38,14 @@ def plot_with_ticks(m,vmin=0,vmax=None,cmap="YlOrBr",unit="$10^{-7} \mathrm{erg^
     ysize = int(xsize/2.)
     nside=hp.npix2nside(m.shape[0])
     
-    theta = np.linspace(np.pi, 0, ysize)
+    theta = np.linspace(np.pi, 0, int(ysize))
 
     if invra:
-        phi   = np.linspace(0, 2*np.pi, xsize)
+        phi   = np.linspace(0, 2*np.pi, int(xsize))
     else:
-        phi   = np.linspace(-np.pi, np.pi, xsize)
-    longitude = np.radians(np.linspace(-180, 180, xsize))
-    latitude = np.radians(np.linspace(-90, 90, ysize))
+        phi   = np.linspace(-np.pi, np.pi, int(xsize))
+    longitude = np.radians(np.linspace(-180, 180, int(xsize)))
+    latitude = np.radians(np.linspace(-90, 90, int(ysize)))
 
     # project the map to a rectangular matrix xsize x ysize
     PHI, THETA = np.meshgrid(phi, theta)
